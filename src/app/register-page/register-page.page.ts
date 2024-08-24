@@ -47,34 +47,34 @@ import { User } from '../models/User';
   styles: [
     `
     .ionInputStyle {
-        color: black;
-        border: 1px solid gray;
-        border-radius: 20px;
-        width: 100%;
-        --padding-start: 1px;
-        --padding-end: 1px;
-        margin-top: 10px;
-      }
+      color: black;
+      border: 1px solid gray;
+      border-radius: 20px;
+      width: 100%;
+      --padding-start: 1px;
+      --padding-end: 1px;
+      margin-top: 10px;
+    }
 
-      .ionInputStyle-invalid {
-        color: black;
-        border: 1px solid red;
-        border-radius: 10px;
-        width: 100%;
-        --padding-start: 10px;
-        --padding-end: 10px;
-        margin-top: 10px;
-      }
-      .min-length-invalid {
-        color: red;
-      }
-      .max-length-invalid {
-        color: red;
-      }
-      .has-letters-or-spaces {
-        color: red;
-      }
-    `,
+    .ionInputStyle-invalid {
+      color: black;
+      border: 1px solid red;
+      border-radius: 10px;
+      width: 100%;
+      --padding-start: 1px;
+      --padding-end: 1px;
+      margin-top: 10px;
+    }
+    .min-length-invalid {
+      color: red;
+    }
+    .max-length-invalid {
+      color: red;
+    }
+    .has-letters-or-spaces {
+      color: red;
+    }
+    `
   ],
 })
 
@@ -106,12 +106,13 @@ export class RegisterPagePage {
     return this.registerForm.invalid;
   }
 
-  get isNameNull(): boolean {
+  get isNameRequired(): boolean {
     const control: AbstractControl | null = this.registerForm.get('name');
+    console.log(control?.touched, control?.errors);
     return control ? control.hasError('required') && control.touched : false;
   }
 
-  get isApellidoNull(): boolean {
+  get isApellidoRequired(): boolean {
     const control: AbstractControl | null = this.registerForm.get('apellido');
     return control ? control.hasError('required') && control.touched : false;
   }
@@ -128,10 +129,7 @@ export class RegisterPagePage {
 
   get isPasswordInvalid(): boolean {
     const control: AbstractControl | null = this.registerForm.get('password');
-    if (control && control.touched) {
-      return control.hasError('minlength') || control.value.length < 6;
-    }
-    return false;
+    return control ? control.invalid && control.touched : false;
   }
 
   get dniValidationErrors(): {
@@ -147,7 +145,7 @@ export class RegisterPagePage {
     };
 
     if (control && control.touched) {
-      const value = control.value || ''; // Asegúrate de que el valor sea una cadena
+      const value = control.value || ''; 
       errors.minLengthInvalid =
         control.hasError('minlength') || value.length < 13;
       errors.maxLengthInvalid =
@@ -169,12 +167,16 @@ export class RegisterPagePage {
   
 
   save(): void {
-    this.User = this.registerForm.value as User;
-    console.log('login ->', this.User);
-    this.spinner = true;
-    setTimeout(() => {
-      this.registerForm.reset();
-      this.spinner = false;
-    }, 10000);
+    if (this.registerForm.valid) {
+      this.User = this.registerForm.value as User;
+      console.log('login ->', this.User);
+      this.spinner = true;
+      setTimeout(() => {
+        this.registerForm.reset();
+        this.spinner = false;
+      }, 10000);
+    }else{
+      console.log('Formulario Invalido', this.registerForm.errors);
+    }
   }
 }
