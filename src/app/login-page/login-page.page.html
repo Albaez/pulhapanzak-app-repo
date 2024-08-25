@@ -1,0 +1,60 @@
+<ion-header [translucent]= "true">
+  <ion-toolbar  style="--background: red">
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true"
+style="
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100%;
+--background: #ffffff;
+padding: 10px;
+"
+>
+<h2
+style="
+  display: flex;
+  justify-content: center;
+  color: red;
+  font-weight: bold;
+"
+>
+Login
+</h2>
+
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()"  style="width: 100%; padding: 10px;">
+    <ion-item>
+      <ion-label class="custom-etiqueta"  position="floating">Email</ion-label>
+      <ion-input class="custom-input"  type="email" formControlName="email"></ion-input>
+      <ion-note
+        *ngIf="isEmailInvalid || isEmailRequired"
+        class="form--error-message"
+      >
+        <span *ngIf="isEmailRequired">El campo es requerido</span>
+        <span *ngIf="isEmailInvalid">El correo electrónico es inválido</span>
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input class="custom-input"  type="password" formControlName="password"></ion-input>
+      <ion-note *ngIf="isPasswordRequired" class="form--error-message"
+        >El campo es requerido</ion-note
+      >
+    </ion-item>
+    <br>
+
+    <ion-button
+      type="submit"
+      expand="block"
+      color="danger"
+      [disabled]="isFormInvalid"
+    >
+      <ion-spinner *ngIf="spinner" color="dark"></ion-spinner>Login
+    </ion-button>
+  </form>
+
+</ion-content>

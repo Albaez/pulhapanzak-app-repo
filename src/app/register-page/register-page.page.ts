@@ -7,6 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonBackButton,
   IonButton,
@@ -20,8 +21,10 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
+  ToastController,
 } from '@ionic/angular/standalone';
-import { User } from '../models/User';
+import { Userregister } from '../models/Userregister';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-register-page',
@@ -79,9 +82,11 @@ import { User } from '../models/User';
 })
 
 export class RegisterPagePage {
+  private _authService: AuthService = inject(AuthService);
   private formBuilder: FormBuilder = inject(FormBuilder);
-
-  User: User = {} as User;
+  private _router: Router = inject(Router);
+  private _toastController: ToastController = inject(ToastController);
+  disabled: boolean = false;
 
   registerForm: FormGroup = this.formBuilder.group({
     name: ['', [Validators.required]],
@@ -102,9 +107,6 @@ export class RegisterPagePage {
 
   spinner: boolean = false;
 
-  get isFormInvalid(): boolean {
-    return this.registerForm.invalid;
-  }
 
   get isNameRequired(): boolean {
     const control: AbstractControl | null = this.registerForm.get('name');
@@ -165,18 +167,54 @@ export class RegisterPagePage {
     return false;
   }
   
+  get isFormInvalid(): boolean {
+    return this.registerForm.invalid;
+  }
 
-  save(): void {
-    if (this.registerForm.valid) {
-      this.User = this.registerForm.value as User;
-      console.log('login ->', this.User);
+
+  onSubmit(): void {
+    if (!this.isFormInvalid) {
+      this.disabled = true;
       this.spinner = true;
-      setTimeout(() => {
-        this.registerForm.reset();
-        this.spinner = false;
-      }, 10000);
-    }else{
-      console.log('Formulario Invalido', this.registerForm.errors);
+      let newUser: Userregister = this.registerForm.value as Userregister;
+
+      this._authService
+        .signUp(newUser)
+        .then(async (result) => {
+          newUser.uid = result.user.uid;
+
+          await this._authService
+            .createUserInFirestore(newUser)
+            .then(async () => {
+              this.spinner = false;
+              this.disabled = false;
+              await this.showAlert('User created successfully');
+              this._router.navigate(['/home']);
+              this.resetForm();
+            });
+        })
+        .catch(async (error) => {
+          console.error(error);
+          this.spinner = false;
+          this.disabled = false;
+          await this.showAlert(
+            'Ha ocurrido un error, vuelva a intentarlo',
+            true
+          );
+        });
     }
+  }
+
+  resetForm(): void {
+    this.registerForm.reset();
+  }
+
+  async showAlert(message: string, isError: boolean = false): Promise<void> {
+    const toast = await this._toastController.create({
+      message: message,
+      duration: 2000,
+      color: isError ? 'danger' : 'success',
+    });
+    toast.present();
   }
 }
