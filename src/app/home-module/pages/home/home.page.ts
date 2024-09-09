@@ -8,7 +8,8 @@ import {
   IonToolbar,
   ToastController,
 } from '@ionic/angular/standalone';
-import { AuthService } from '../service/auth.service';
+import { AuthService } from '../../../auth/service/auth.service';
+
 
 @Component({
   selector: 'app-home',
@@ -21,6 +22,8 @@ export class HomePage {
   private _authService: AuthService = inject(AuthService);
   private _router: Router = inject(Router);
   private _toastController: ToastController = inject(ToastController);
+
+
 
   async logOut(): Promise<void> {
     await this._authService

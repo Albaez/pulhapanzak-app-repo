@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../service/auth.service';
+import { AuthService } from '../../auth/service/auth.service';
 
 
 @Injectable({

@@ -1,0 +1,25 @@
+.ion-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    --background: #ffffff;
+    padding: 15px;
+  }
+  
+  .g-container {
+    display: grid;
+    padding: 10px; 
+  }
+  
+  .gallery-it {
+    overflow: hidden; 
+    
+
+  }
+  
+  .gallery-item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }

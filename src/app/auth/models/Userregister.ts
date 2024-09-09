@@ -1,6 +1,6 @@
 export interface Userregister {
     name: string;
-    apellido: string;
+    lastname: string;
     email: string;
     password: string;
     dni: string;

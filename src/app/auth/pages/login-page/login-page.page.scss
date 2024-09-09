@@ -1,0 +1,56 @@
+.custom-input {
+    width: 100%;
+    border: 1px solid rgb(122, 118, 118);
+    border-radius:20px; /* Bordes redondead    os */
+    text-align: center;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    margin-top: 10px;
+}  
+
+.custom-etiqueta {
+    display: inline-block;
+    margin-top: 8px;
+    padding-top: 20px;
+    font-size: 15px;
+    text-align: left;
+    margin-left: 10px;
+    margin-right: 10px;
+  
+  }
+
+  ion-button {
+    text-transform: none; 
+    text-emphasis-color: #0e911f11;
+  font-style: inherit;  
+}
+
+.google-logo {
+  width: 24px; /* Ajusta el tamaño según sea necesario */
+  height: 24px;
+  margin-right: 8px; /* Espacio entre el logo y el texto */
+  vertical-align: middle; /* Alinea verticalmente con el texto */
+}
+
+.separator {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.separator span {
+  background: white;
+  padding: 0 10px;
+}
+
+.center-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.spanRedirect {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+}
+
+

@@ -8,6 +8,7 @@ import {
   IonHeader,
   IonIcon,
   IonInput,
+  IonInputPasswordToggle,
   IonItem,
   IonLabel,
   IonNote,
@@ -16,8 +17,8 @@ import {
   IonToolbar,
   ToastController,
 } from '@ionic/angular/standalone';
-import { Login } from '../models/Login';
-import { AuthService } from '../service/auth.service';
+import { Login } from '../../models/Login';
+import { AuthService } from '../../service/auth.service';
 
 
 @Component({
@@ -37,8 +38,34 @@ import { AuthService } from '../service/auth.service';
     IonNote,
     IonSpinner,
     IonLabel,
+    IonInputPasswordToggle,
     ReactiveFormsModule,
     IonIcon,
+  ],
+  styles: [
+    `
+      //ngClass para input cuando sea valido
+      .ionInputStyle {
+        color: black;
+        border: 2px solid black;
+        border-radius: 10px;
+        width: 100%;
+        --padding-start: 10px;
+        --padding-end: 10px;
+        margin-top: 10px;
+      }
+
+      //ngClass para input cuando sea invalido o nulo
+      .ionInputStyle-invalid {
+        color: black;
+        border: 2px solid red;
+        border-radius: 10px;
+        width: 100%;
+        --padding-start: 10px;
+        --padding-end: 10px;
+        margin-top: 10px;
+      }
+    `,
   ],
 })
 export class LoginPagePage {
@@ -84,7 +111,7 @@ export class LoginPagePage {
           this.spinner = false;
           this.disabled = false;
           await this.showAlert('Login successful');
-          this._router.navigate(['/home']);
+          this._router.navigate(['/tabs/home']);
           this.resetForm();
         })
         .catch(async (error) => {
@@ -94,6 +121,16 @@ export class LoginPagePage {
           await this.showAlert('Invalid email or password', true);
         });
     }
+  }
+
+  goToRegister(){
+    this.resetForm();
+    this._router.navigate(['/register']);
+  }
+
+  goToPasswordReset(){
+    this.resetForm();
+    this._router.navigate(['/password.reset']);
   }
 
   resetForm(): void {
