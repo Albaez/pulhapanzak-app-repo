@@ -8,8 +8,13 @@
 
 <ion-content [fullscreen]="true">
  
-
-    <ion-button (click)="logOut()">Cerrar sesion</ion-button>
     
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-button (click)="logOut()">Cerrar sesion</ion-button>
+    </ion-fab-button>
+  </ion-fab>
+   
+
  
 </ion-content>

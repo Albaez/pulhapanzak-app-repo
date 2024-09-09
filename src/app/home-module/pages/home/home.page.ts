@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import {
   IonButton,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
   IonTitle,
   IonToolbar,
@@ -16,7 +18,7 @@ import { AuthService } from '../../../auth/service/auth.service';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonButton, IonContent, IonHeader, IonTitle, IonToolbar],
+  imports: [IonButton, IonContent, IonHeader, IonTitle, IonToolbar, IonFab, IonFabButton],
 })
 export class HomePage {
   private _authService: AuthService = inject(AuthService);
