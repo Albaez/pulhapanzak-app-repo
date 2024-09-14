@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import {
   IonButton,
   IonCard,
@@ -14,17 +13,15 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
+  IonImg,
   IonNote,
   IonRow,
   IonTitle,
-  IonToolbar,
-  ToastController,
+  IonToolbar
 } from '@ionic/angular/standalone';
 
-import { addIcons } from 'ionicons';
-import { add } from 'ionicons/icons';
-import { GalleryService } from '../auth/service/service-gallery/gallery.service';
-
+import { GalleryData } from '../auth/models/GalleryData';
+import { GalleryService } from './service-gallery/gallery.service';
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.page.html',
@@ -46,43 +43,23 @@ import { GalleryService } from '../auth/service/service-gallery/gallery.service'
     IonCardContent,
     CommonModule,
     IonFab,
+    IonImg,
     IonFabButton,
     IonIcon
   ],
 })
 export class GalleryPage implements OnInit {
-  private _GalleryService: GalleryService = inject(GalleryService);
-  private _router: Router = inject(Router);
-  private _toastController: ToastController = inject(ToastController);
+ 
+  constructor(private galleryService: GalleryService) { }
+  galleries: GalleryData[] = [];
+  photos: string[] = []
 
-  galleryIt: any[] | null = [];
+  ngOnInit() {
+    this.galleryService.getActiveGalleries().subscribe((data) => {
+      this.galleries = data;
+      this.photos = data.map((gallery) => gallery.photo)
+      console.log(this.photos);
 
-  constructor() {
-    addIcons({add})
-  }
-
-  async ngOnInit(): Promise <void> {
-
-    try{
-
-      const gallery = await this._GalleryService.getGalleryByQuery();
-      this.galleryIt = gallery; 
-      console.log('galleryByQuery => ', gallery);
-    } catch (error) {
-      console.log('error => ', error);
-      await this.showAlert(
-        'ocurrió un error al intentar obtener datos de galería (getGalleryByQuery)',
-        true
-      );
-    }
-  }
-
-  async showAlert(message: string, isError: boolean = false): Promise<void> {
-    const toast = await this._toastController.create({
-      message: message,
-      duration: 1000,
-      color: isError ? 'danger' : 'success',
-    });
-    toast.present();
+    })
   }
 }

@@ -1,28 +1,35 @@
 import { inject, Injectable } from '@angular/core';
-import { Login } from '../models/Login';
-import { Userregister } from '../models/Userregister';
-
 import {
   Auth,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   User,
-  UserCredential,
+  UserCredential
 } from '@angular/fire/auth';
 import {
+  addDoc,
   collection,
   CollectionReference,
+  deleteDoc,
   doc,
   DocumentReference,
   Firestore,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
   setDoc,
+  updateDoc,
+  where,
 } from '@angular/fire/firestore';
-
-import { getDoc, getDocs, query, where } from 'firebase/firestore';
+import { DeviceDto } from '../models/DeviceDto';
+import { Login } from '../models/Login';
 import { PasswordReset } from '../models/PasswordReset';
+import { Userregister } from '../models/Userregister';
 
 const PATH: string = 'users';
+const devicePath: string = 'devices';
 
 @Injectable({
   providedIn: 'root',
@@ -100,9 +107,15 @@ export class AuthService {
     const docRef: DocumentReference = doc(this._collection, user.uid);
     await setDoc(docRef, {
       name: user.name,
+      lastname: user.lastname,
+      dni: user.dni,
+      birthday: user.birthday,
       phone: user.phone,
       email: user.email,
+      password: user.password,
+      isActive: true,
       uid: docRef.id,
+      imageProfile: '',
     });
   }
 
@@ -111,8 +124,13 @@ export class AuthService {
     const docRef: DocumentReference = doc(this._collection);
     await setDoc(docRef, {
       name: user.name,
+      lastname: user.lastname,
+      dni: user.dni,
+      birthday: user.birthday,
       phone: user.phone,
       email: user.email,
+      password: user.password,
+      imageProfile: user.imageProfile,
       uid: docRef.id,
     });
   }
@@ -131,17 +149,52 @@ export class AuthService {
     }
   }
 
-  async getUserByQuery(): Promise<Userregister | null> {
-    const user = await this.getCurrentUser();
-    const userQuery = query(
-      this._collection,
-      where('uid', '==', user?.uid),
-      where('email', '==', user?.email)
-    );
-    const userSnapshot = await getDocs(userQuery);
-    if (!userSnapshot.empty) {
+    // Método para obtener un usuario por medio de un query
+    async getUserByQuery(): Promise<Userregister | null> {
+      const user = await this.getCurrentUser();
+      const userQuery = query(
+        this._collection,
+        where('uid', '==', user?.uid),
+        where('isActive', '==', true),
+        //orderBy('name', 'asc') // Para ordenar de forma ascendente
+        orderBy('name', 'desc') // Para ordenar de forma descendente
+      );
+      const userSnapshot = await getDocs(userQuery);
+      if (userSnapshot.empty) {
+        return null;
+      }
       return userSnapshot.docs[0].data() as Userregister;
     }
-    return null;
+  
+    // Método para actualizar un usuario en Firestore.
+    async updateUser(user: Userregister): Promise<void> {
+      if (!user.uid) throw new Error('User UID is required');
+  
+      const docRef = doc(this._collection, user.uid);
+      await updateDoc(docRef, {
+        ...{
+          name: user.name,
+          dni: user.dni,
+          birthday: user.birthday,
+          phone: user.phone,
+          email: user.email,
+          imageProfile: user.imageProfile,
+        },
+      });
+    }
+  
+    async deleteUser(id: string): Promise<void> {
+      if (!id) throw new Error('User UID is required');
+  
+      const docRef = doc(this._collection, id);
+      await deleteDoc(docRef);
+    }
+
+    async createDevice(device: DeviceDto): Promise<void> {
+      const deviceCollection: CollectionReference = collection(
+        this._firestore,
+        devicePath
+      );
+      await addDoc(deviceCollection, device);
+    }
   }
-}

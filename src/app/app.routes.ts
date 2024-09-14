@@ -1,7 +1,6 @@
 import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
 import { AuthGuard } from './shared/guards/auth-guard';
-
 export const routes: Routes = [
 
   {

@@ -1,6 +1,8 @@
 <ion-header [translucent]="true">
-  <ion-toolbar style="--background: red">
-    <ion-back-button></ion-back-button>
+  <ion-toolbar color="danger">
+    <p (click)="goToLogin()">
+      <ion-icon id="arrow-back" name="arrow-back-outline"></ion-icon>
+    </p>
   </ion-toolbar>
 </ion-header>
 
@@ -26,10 +28,10 @@
     Registro
   </h2>
 
-  <form
-    [formGroup]="registerForm"
+  
+    <form [formGroup]="registerForm"
     (ngSubmit)="onSubmit()"
-    style="width: 100%; padding: 10px"
+    style="width: 100%; padding: 10px"> 
   >
     <!-- Nombres -->
     <ion-icon name="person-outline"></ion-icon>
@@ -63,6 +65,79 @@
       <span *ngIf="isLastnameRequired">Los Apellidos son Requeridos. *</span>
     </ion-note>
     <br />
+
+     <!-- DNI -->
+     <ion-icon class="icono" name="id-card-outline" slot="start"></ion-icon>
+     <ion-label class="custom-etiqueta"><strong>DNI *</strong></ion-label>
+     <ion-input
+       id="dni-input"
+       class="custom-input"
+       type="number"
+       formControlName="dni"
+       [ngClass]="{
+           'ionInputStyle': !dniValidationErrors.minLengthInvalid && !dniValidationErrors.maxLengthInvalid && !dniValidationErrors.hasLettersOrSpaces,
+           'ionInputStyle-invalid': dniValidationErrors.minLengthInvalid || dniValidationErrors.maxLengthInvalid || dniValidationErrors.hasLettersOrSpaces
+         }"
+     >
+     </ion-input>
+     <ion-note
+       class="form--error-message"
+       *ngIf="dniValidationErrors.minLengthInvalid || dniValidationErrors.maxLengthInvalid || dniValidationErrors.hasLettersOrSpaces"
+     >
+       <span *ngIf="dniValidationErrors.minLengthInvalid"
+         >El DNI es demasiado corto.</span
+       >
+       <span *ngIf="dniValidationErrors.maxLengthInvalid"
+         >El DNI es demasiado largo.</span
+       >
+       <span *ngIf="dniValidationErrors.hasLettersOrSpaces"
+         >El DNI no debe contener letras o espacios.</span
+       >
+     </ion-note>
+     <br>
+
+     <!--Fecha de cumpleaños-->
+      <ion-icon name="callendar"></ion-icon>
+      <ion-label class="custom-etiqueta"><strong>Fecha de Nacimiento*</strong></ion-label>
+  
+      <ion-input  
+        class="custom-input" 
+        id="birthday" 
+        formControlName="birthday" 
+        type="date" 
+        [ngClass]="{
+          'ionInputStyle': !isBirthdayUse,
+          'ionInputStyle-invalid': isBirthdayInvalid
+        }"
+        >
+      </ion-input>
+      <ion-note class="form--error-message" *ngIf="isBirthdayInvalid">
+        <small>La fecha de nacimiento es requerida.</small>
+      </ion-note>
+      <ion-note *ngIf="isBirthdayUse">
+        <small>La fecha de nacimiento no puede ser en el futuro.</small>
+      </ion-note>
+    
+    <br>
+
+      <!-- Teléfono -->
+    <ion-icon name="call-outline"></ion-icon>
+    <ion-label class="custom-etiqueta"><strong>Teléfono *</strong></ion-label>
+    <ion-input
+      class="custom-input"
+      type="tel"
+      formControlName="phone"
+      [ngClass]="{
+          'ionInputStyle': !isPhoneInvalid,
+          'ionInputStyle-invalid': isPhoneInvalid
+        }"
+    >
+    </ion-input>
+    <ion-note class="form--error-message" *ngIf="isPhoneInvalid"
+      >El Teléfono es obligatorio y no puede ser menor de 8 dígitos. *</ion-note
+    >
+    <br />
+
 
     <!-- Correo -->
     <ion-icon name="at-outline"></ion-icon>
@@ -103,54 +178,7 @@
     </ion-note>
     <br />
 
-    <!-- DNI -->
-    <ion-icon class="icono" name="id-card-outline" slot="start"></ion-icon>
-    <ion-label class="custom-etiqueta"><strong>DNI *</strong></ion-label>
-    <ion-input
-      id="dni-input"
-      class="custom-input"
-      type="number"
-      formControlName="dni"
-      [ngClass]="{
-          'ionInputStyle': !dniValidationErrors.minLengthInvalid && !dniValidationErrors.maxLengthInvalid && !dniValidationErrors.hasLettersOrSpaces,
-          'ionInputStyle-invalid': dniValidationErrors.minLengthInvalid || dniValidationErrors.maxLengthInvalid || dniValidationErrors.hasLettersOrSpaces
-        }"
-    >
-    </ion-input>
-    <ion-note
-      class="form--error-message"
-      *ngIf="dniValidationErrors.minLengthInvalid || dniValidationErrors.maxLengthInvalid || dniValidationErrors.hasLettersOrSpaces"
-    >
-      <span *ngIf="dniValidationErrors.minLengthInvalid"
-        >El DNI es demasiado corto.</span
-      >
-      <span *ngIf="dniValidationErrors.maxLengthInvalid"
-        >El DNI es demasiado largo.</span
-      >
-      <span *ngIf="dniValidationErrors.hasLettersOrSpaces"
-        >El DNI no debe contener letras o espacios.</span
-      >
-    </ion-note>
-    <br />
-
-    <!-- Teléfono -->
-    <ion-icon name="call-outline"></ion-icon>
-    <ion-label class="custom-etiqueta"><strong>Teléfono *</strong></ion-label>
-    <ion-input
-      id="phone-input"
-      class="custom-input"
-      type="tel"
-      formControlName="phone"
-      [ngClass]="{
-          'ionInputStyle': !isPhoneInvalid,
-          'ionInputStyle-invalid': isPhoneInvalid
-        }"
-    >
-    </ion-input>
-    <ion-note class="form--error-message" *ngIf="isPhoneInvalid"
-      >El Teléfono es obligatorio y no puede ser menor de 8 dígitos. *</ion-note
-    >
-    <br />
+      
 
     <!-- Botón de registro -->
     <ion-button
@@ -160,7 +188,7 @@
       [disabled]="isFormInvalid || disabled"
     >
       <ion-spinner *ngIf="spinner" slot="start"></ion-spinner>
-      Crear Cuenta
+      Registrarse
     </ion-button>
   </form>
 </ion-content>

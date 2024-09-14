@@ -32,15 +32,39 @@
   vertical-align: middle; /* Alinea verticalmente con el texto */
 }
 
-.separator {
-  text-align: center;
-  margin: 20px 0;
+#or-options {
+  border-bottom: 10px;
+  --height: 18px !important;
+  margin-bottom: 18px;
 }
 
-.separator span {
-  background: white;
-  padding: 0 10px;
+#or-oprtions>ion-text {
+  --font-size: 10px;
+  --text-align: center !important;
+
 }
+#google-btn {
+  --border-radius: 20px !important;
+  margin-top: 10px;
+  --border-color: rgb(199, 199, 199) !important;
+}
+
+#google-btn > p {
+  --font-size: 10px;
+  font-family: 'Roboto', sans-serif !important;
+  margin-left: 16px;
+  color: rgb(63, 62, 62);
+}
+
+#forgotten-pass{
+  cursor: pointer;
+  color: rgb(81, 141, 94);
+  border: none;
+  text-align: end;
+  font-size: smaller;
+  margin-top: 10px;
+}
+
 
 .center-container {
   text-align: center;

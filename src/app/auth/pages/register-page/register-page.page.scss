@@ -50,6 +50,17 @@ ion-spinnSSer {
   margin-right: 10px;
 }
 
-.custom-toolbar {
-  background-color: red;
+#arrow-back{
+  size: 20px;
+  color: white;
+  width: 45px;
+  height: 25px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+ion-button {
+  text-transform: none; 
+  text-emphasis-color: #0e911f11;
+font-style: inherit;  
 }

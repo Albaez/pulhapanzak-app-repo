@@ -4,6 +4,9 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validator
 import { Router } from '@angular/router';
 import {
   IonButton,
+  IonCard,
+  IonCardContent,
+  IonCol,
   IonContent,
   IonHeader,
   IonIcon,
@@ -12,10 +15,13 @@ import {
   IonItem,
   IonLabel,
   IonNote,
+  IonRow,
   IonSpinner,
+  IonText,
   IonTitle,
   IonToolbar,
-  ToastController,
+
+  ToastController
 } from '@ionic/angular/standalone';
 import { Login } from '../../models/Login';
 import { AuthService } from '../../service/auth.service';
@@ -28,6 +34,9 @@ import { AuthService } from '../../service/auth.service';
   standalone: true,
   imports: [
     IonContent,
+    IonCardContent,
+    IonCol,
+    IonRow,
     IonHeader,
     IonTitle,
     IonToolbar,
@@ -38,6 +47,8 @@ import { AuthService } from '../../service/auth.service';
     IonNote,
     IonSpinner,
     IonLabel,
+    IonCard,
+    IonText,
     IonInputPasswordToggle,
     ReactiveFormsModule,
     IonIcon,
@@ -90,9 +101,9 @@ export class LoginPagePage {
     return control ? control.hasError('required') && control.touched : false;
   }
 
-  get isPasswordRequired(): boolean {
-    const control: AbstractControl | null = this.registerForm.get('password');
-    return control ? control.invalid && control.touched : false;
+  get isPasswordInvalid(): boolean {
+    const control: AbstractControl | null = this.registerForm.get('pass')
+    return control ? control.invalid && control.touched : false
   }
 
   get isFormInvalid(): boolean {
@@ -110,7 +121,7 @@ export class LoginPagePage {
         .then(async () => {
           this.spinner = false;
           this.disabled = false;
-          await this.showAlert('Login successful');
+          await this.showAlert('Inicio de sesión exitosa');
           this._router.navigate(['/tabs/home']);
           this.resetForm();
         })
@@ -118,10 +129,13 @@ export class LoginPagePage {
           console.error(error);
           this.spinner = false;
           this.disabled = false;
-          await this.showAlert('Invalid email or password', true);
+          await this.showAlert('Correo o Contraseña Invalida', true);
         });
     }
   }
+  async googleSign(): Promise<void> {
+    await this.showAlert('No Disponible!', false); 
+   }
 
   goToRegister(){
     this.resetForm();

@@ -12,7 +12,6 @@ import {
 } from '@ionic/angular/standalone';
 import { AuthService } from '../../../auth/service/auth.service';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -24,6 +23,8 @@ export class HomePage {
   private _authService: AuthService = inject(AuthService);
   private _router: Router = inject(Router);
   private _toastController: ToastController = inject(ToastController);
+
+
 
 
 

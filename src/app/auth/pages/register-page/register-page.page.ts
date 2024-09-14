@@ -93,6 +93,7 @@ import { AuthService } from '../../service/auth.service';
     registerForm: FormGroup = this.formBuilder.group({
       name: ['', [Validators.required]],
       lastname: ['', [Validators.required]],
+      birthday: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       dni: [
@@ -168,6 +169,26 @@ import { AuthService } from '../../service/auth.service';
       }
       return false;
     }
+
+
+    get isBirthdayInvalid(): boolean {
+      const control: AbstractControl | null = this.registerForm.get('birthday');
+      return control ? control.invalid && control.touched : false;
+    }
+  
+    get isBirthdayUse(): boolean {
+      const control: AbstractControl | null = this.registerForm.get('birthday');
+  
+      if (control && control.value) {
+        const selectedDate = new Date(control.value).getTime();
+        const today = new Date().setHours(23, 59, 59, 999); 
+        return selectedDate > today; 
+      }
+  
+      return false;
+    }
+
+
     
     get isFormInvalid(): boolean {
       return this.registerForm.invalid;
@@ -190,25 +211,26 @@ import { AuthService } from '../../service/auth.service';
               .then(async () => {
                 this.spinner = false;
                 this.disabled = false;
-                await this.showAlert('User created successfully');
-                this._router.navigate(['/home']);
-                this.resetForm();
+                await this.showAlert('Usuario creado exitosamente');
+                this.registerForm.reset()
+                this._router.navigate(['/tabs/home'])
               });
           })
           .catch(async (error) => {
             console.error(error);
             this.spinner = false;
             this.disabled = false;
-            await this.showAlert(
-              'Ha ocurrido un error, vuelva a intentarlo',
-              true
-            );
+            await this.showAlert('Ha ocurrido un error')
           });
       }
     }
 
     resetForm(): void {
       this.registerForm.reset();
+    }
+
+    goToLogin(): void {
+      this._router.navigate(['/login']);
     }
 
     async showAlert(message: string, isError: boolean = false): Promise<void> {
