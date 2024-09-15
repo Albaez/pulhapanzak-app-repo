@@ -9,6 +9,7 @@ export const environment = {
     authDomain: "pulhapanzakapp.firebaseapp.com",
     messagingSenderId: "997627881926",
   },
+  API_URL: 'https://rickandmortyapi.com/api/',
 };
 
 

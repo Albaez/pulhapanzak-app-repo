@@ -1,6 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 
 export interface Userregister {
+    deviceId:string;
     name: string;
     lastname: string;
     birthday:Timestamp;

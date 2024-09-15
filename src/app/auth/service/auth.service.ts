@@ -65,6 +65,11 @@ export class AuthService {
     });
   }
 
+  async getCurrentUserId(): Promise<string | null> {
+    const user = await this.getCurrentUser();
+    return user?.uid ?? null;
+  }
+
   async login(model: Login): Promise<UserCredential> {
     const isUserLoggued: boolean = await this.isUserLoggued();
     if (isUserLoggued) return Promise.reject('User is loggued');
